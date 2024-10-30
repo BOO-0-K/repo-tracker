@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { fetchCommit, fetchRepo } from "../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useRef, useState } from "react";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -170,6 +171,8 @@ interface ICommit {
 function Repo() {
     const { repo } = useParams();
 
+    const [activeTab, setActiveTab] = useState<string>("");
+
     const commitTabMatch = useMatch("/:repo/commits");
     const messageTabMatch = useMatch("/:repo/messages");
 
@@ -189,7 +192,50 @@ function Repo() {
         }
     });
 
+    function getTodayCommitCount(commits: ICommit[]): number {
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+
+        const todayCommits = commits.filter(commit => {
+            const commitDate = new Date(commit.commit.committer.date).toISOString().split('T')[0];
+            return commitDate === todayString;
+        });
+
+        return todayCommits.length;
+    }
+
+    function getLastCommitMessage(commits: ICommit[]): string | null {
+        if (commits.length === 0) return null;
+
+        const lastCommit = commits.sort((a, b) => {
+            return new Date(b.commit.committer.date).getTime() - new Date(a.commit.committer.date).getTime();
+        })[0];
+
+        return lastCommit.commit.message;
+    }
+
     const loading = repoLoading || commitLoading;
+
+    const commitTabRef = useRef<HTMLDivElement>(null);
+    const messageTabRef = useRef<HTMLDivElement>(null);
+
+    const handleTabClick = (tab: string) => {
+        setActiveTab(tab);
+    }
+
+    useEffect(() => {
+        let targetRef = activeTab === "commits" ? commitTabRef : messageTabRef;
+        
+        if (targetRef.current) {
+            const offsetTop = targetRef.current.getBoundingClientRect().top + window.scrollY;
+            
+            window.scrollTo({
+                top: offsetTop,
+                behavior: "smooth",
+            });
+        }
+
+    }, [activeTab]);
 
     return (
         <Container>
@@ -226,7 +272,7 @@ function Repo() {
                             </OverviewItem>
                         </Overview>
 
-                        <Link to={`${repoData?.html_url}`}>
+                        <Link to={`${repoData?.html_url}`} target="_blank" >
                             <Img src={`https://opengraph.githubassets.com/${repoData?.id}/${repoData?.full_name}`} /> 
                         </Link>
 
@@ -236,27 +282,27 @@ function Repo() {
                                 <span>{commitData?.length}</span>
                             </OverviewItem>
                             <OverviewItem>
-                                <span>Total Commits:</span>
-                                <span>{commitData?.length}</span>
+                                <span>Today Commits:</span>
+                                <span>{commitData ? getTodayCommitCount(commitData) : 0}</span>
                             </OverviewItem>
                             <OverviewItem>
-                                <span>Total Commits:</span>
-                                <span>{commitData?.length}</span>
+                                <span>Last Commit Message:</span>
+                                <span>{commitData ? getLastCommitMessage(commitData) : "-"}</span>
                             </OverviewItem>
                         </Overview>
 
                         <Description>{repoData?.description}</Description>
                         
                         <Tabs>
-                            <Tab $isActive={commitTabMatch !== null}>
+                            <Tab $isActive={commitTabMatch !== null} onClick={() => handleTabClick("commits")}>
                                 <Link to={`/${repo}/commits`}>Commits</Link>
                             </Tab>
-                            <Tab $isActive={messageTabMatch !== null}>
+                            <Tab ref={messageTabRef} $isActive={messageTabMatch !== null} onClick={() => handleTabClick("messages")}>
                                 <Link to={`/${repo}/messages`}>Messages</Link>
                             </Tab>
                         </Tabs>
 
-                        <Outlet context={{commitData}} />
+                        <Outlet context={{commitData, commitTabRef, messageTabRef}} />
                     </>
                 )
             }
