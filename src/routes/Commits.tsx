@@ -52,7 +52,7 @@ function Commits() {
         if (dates.length === 0) return {};
 
         const startDate = new Date(Math.min(...dates.map(date => new Date(date).getTime())));
-        const endDate = new Date(Math.max(...dates.map(date => new Date(date).getTime())));
+        const endDate = new Date();
 
         const dailyCommitCounts: Record<string, number> = {};
         let currentDate = startDate;

@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 
 const MessageContainer = styled.div``;
@@ -51,6 +51,7 @@ interface ICommit {
       avatar_url: string;
       html_url: string;
     },
+    html_url: string;
 }
 
 interface IOutletContext {
@@ -58,18 +59,26 @@ interface IOutletContext {
     messageTabRef: React.Ref<HTMLDivElement>;
 }
 
+interface IMessage {
+    message: string;
+    url: string;
+}
+
 function Messages() {
     const { commitData, messageTabRef } = useOutletContext<IOutletContext>();
 
-    function getDailyCommitMessages(commits: ICommit[]): Record<string, string[]> {
-        const commitMessages: Record<string, string[]> = {};
+    function getDailyCommitMessages(commits: ICommit[]): Record<string, IMessage[]> {
+        const commitMessages: Record<string, IMessage[]> = {};
 
         commits.forEach(commit => {
             const date = new Date(commit.commit.committer.date).toISOString().split('T')[0];
             if (!commitMessages[date]) {
                 commitMessages[date] = [];
             }
-            commitMessages[date].push(commit.commit.message);
+            commitMessages[date].push({
+                message: commit.commit.message,
+                url: commit.html_url,
+            });
         });
 
         return commitMessages;
@@ -80,14 +89,16 @@ function Messages() {
     return (
         <MessageContainer ref={messageTabRef}>
             {
-                Object.entries(dailyCommitMessages).map(([date, messages]) => (
+                Object.entries(dailyCommitMessages).map(([date, commits]) => (
                     <Overview key={date}>
                         <OverviewItem>
                             <span>{date}</span>
                             {
-                                messages.length > 0 ? ( 
-                                    messages.map((message: string, index: number) => (
-                                        <p key={index}>{message}</p>
+                                commits.length > 0 ? ( 
+                                    commits.map((commit: IMessage, index: number) => (
+                                        <Link to={`${commit.url}`} key={index} target="_blank">
+                                            <p>{commit.message}</p>
+                                        </Link>
                                     ))     
                                 ) : (
                                     <p>No messages for this date.</p>
@@ -98,7 +109,7 @@ function Messages() {
                 ))
             }
         </MessageContainer>
-    )
+    );
 }
 
 export default Messages;
