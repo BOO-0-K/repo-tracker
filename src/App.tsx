@@ -3,6 +3,7 @@ import Router from './Router';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
 import { useState } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -27,11 +28,13 @@ function App() {
 
   return (
     <>
-      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        <Reset />
-        <GlobalStyle />
-        <Router isDark={isDark} toggleDark={toggleDark} />
-      </ThemeProvider>
+      <HelmetProvider>
+        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+          <Reset />
+          <GlobalStyle />
+          <Router isDark={isDark} toggleDark={toggleDark} />
+        </ThemeProvider>
+      </HelmetProvider>
     </>
   );
 }

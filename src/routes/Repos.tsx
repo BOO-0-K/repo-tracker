@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faLightbulb as solidLightBulb } from "@fortawesome/free-solid-svg-icons";
 import { faLightbulb as regularLightBulb } from "@fortawesome/free-regular-svg-icons";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -103,6 +104,9 @@ function Repos({ toggleDark, isDark }: IReposProps) {
 
     return (
         <Container>
+            <Helmet>
+                <title>Repo Tracker | Repositories</title>
+            </Helmet>
             <Header>
                 <Title>
                     <FontAwesomeIcon icon={faGithub} />

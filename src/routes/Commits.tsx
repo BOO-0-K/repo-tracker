@@ -37,7 +37,11 @@ interface IOutletContext {
     commitTabRef: React.Ref<HTMLDivElement>;
 }
 
-function Commits() {
+interface ICommitsProps {
+    isDark: boolean;
+}
+
+function Commits({ isDark }: ICommitsProps) {
     const { commitData, commitTabRef } = useOutletContext<IOutletContext>();
 
     function getDailyCommitCounts(commits: ICommit[]): Record<string, number> {
@@ -79,7 +83,7 @@ function Commits() {
                 ]}
                 options={{
                     theme: {
-                        mode: "dark",
+                        mode: isDark ? "dark" : "light",
                     },
                     chart: {
                         height: 300,

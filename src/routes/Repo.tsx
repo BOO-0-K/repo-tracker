@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight, faLightbulb as solidLightBulb } from "@fortawesome/free-solid-svg-icons";
 import { faLightbulb as regularLightBulb } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -261,6 +262,9 @@ function Repo({ toggleDark, isDark }: IRepoProps) {
 
     return (
         <Container>
+            <Helmet>
+                <title>Repo Tracker | { loading ? "Repository" : repoData?.name }</title>
+            </Helmet>
             <Header>
                 <BackBtn>
                     <Link to={'/'}>

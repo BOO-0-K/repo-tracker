@@ -15,7 +15,7 @@ function Router({ toggleDark, isDark }: IRouterProps) {
             <Routes>
                 <Route path="/" element={<Repos toggleDark={toggleDark} isDark={isDark} />} />
                 <Route path="/:repo/*" element={<Repo toggleDark={toggleDark} isDark={isDark} />}>
-                    <Route path="commits" element={<Commits />} />
+                    <Route path="commits" element={<Commits isDark={isDark} />} />
                     <Route path="messages" element={<Messages />} />
                 </Route>
             </Routes>
