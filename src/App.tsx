@@ -1,6 +1,8 @@
 import { Reset } from 'styled-reset';
 import Router from './Router';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { darkTheme, lightTheme } from './theme';
+import { useState } from 'react';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -20,11 +22,16 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function App() {
+  const [isDark, setIsDark] = useState(true);
+  const toggleDark = () => setIsDark((current) => !current);
+
   return (
     <>
-      <Reset />
-      <GlobalStyle />
-      <Router />
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <Reset />
+        <GlobalStyle />
+        <Router isDark={isDark} toggleDark={toggleDark} />
+      </ThemeProvider>
     </>
   );
 }

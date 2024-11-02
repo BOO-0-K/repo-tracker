@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faLightbulb as solidLightBulb } from "@fortawesome/free-solid-svg-icons";
+import { faLightbulb as regularLightBulb } from "@fortawesome/free-regular-svg-icons";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -20,6 +22,22 @@ const Header = styled.header`
 
 const Title = styled.h1`
     font-size: 48px;
+`;
+
+const Footer = styled.footer`
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+`;
+
+const ToggleDarkBtn = styled.button`
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    background-color: ${(props) => props.theme.toggleColor};
+    color: ${(props) => props.theme.textColor};
+    border: none;
+    cursor: pointer;
 `;
 
 const ReposList = styled.ul``;
@@ -69,7 +87,12 @@ interface IRepo {
     updated_at: string;
 }
 
-function Repos() {
+interface IReposProps {
+    toggleDark: () => void;
+    isDark: boolean;
+}
+
+function Repos({ toggleDark, isDark }: IReposProps) {
     const {isLoading, data: repos} = useQuery({
         queryKey: ['allRepos'],
         queryFn: fetchRepos,
@@ -103,6 +126,11 @@ function Repos() {
                     </ReposList>
                 )
             }
+            <Footer>
+                <ToggleDarkBtn onClick={toggleDark}>
+                    <FontAwesomeIcon icon={isDark ? regularLightBulb : solidLightBulb} />
+                </ToggleDarkBtn>
+            </Footer>
         </Container>
     );
 }

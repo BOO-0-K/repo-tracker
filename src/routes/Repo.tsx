@@ -3,7 +3,8 @@ import { Link, Outlet, useMatch, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCommit, fetchRepo } from "../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faLightbulb as solidLightBulb } from "@fortawesome/free-solid-svg-icons";
+import { faLightbulb as regularLightBulb } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useRef, useState } from "react";
 
 const Container = styled.div`
@@ -52,6 +53,22 @@ const Title = styled.h1`
     font-size: 48px;
     text-align: center;
     flex: 1;
+`;
+
+const Footer = styled.footer`
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+`;
+
+const ToggleDarkBtn = styled.button`
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    background-color: ${(props) => props.theme.toggleColor};
+    color: ${(props) => props.theme.textColor};
+    border: none;
+    cursor: pointer;
 `;
 
 const Img = styled.img`
@@ -119,6 +136,11 @@ const Loader = styled.span`
     display: block;
 `;
 
+interface IRepoProps {
+    toggleDark: () => void;
+    isDark: boolean;
+}
+
 interface IRepo {
     id: string;
     name: string;
@@ -168,7 +190,7 @@ interface ICommit {
     },
 }
 
-function Repo() {
+function Repo({ toggleDark, isDark }: IRepoProps) {
     const { repo } = useParams();
 
     const [activeTab, setActiveTab] = useState<string>("");
@@ -306,6 +328,11 @@ function Repo() {
                     </>
                 )
             }
+            <Footer>
+                <ToggleDarkBtn onClick={toggleDark}>
+                    <FontAwesomeIcon icon={isDark ? regularLightBulb : solidLightBulb} />
+                </ToggleDarkBtn>
+            </Footer>
         </Container>
     );
 }
