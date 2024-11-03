@@ -105,7 +105,7 @@ function Repos({ toggleDark, isDark }: IReposProps) {
     return (
         <Container>
             <Helmet>
-                <title>Repo Tracker</title>
+                <title>Repo Tracker | Repositories</title>
             </Helmet>
             <Header>
                 <Title>

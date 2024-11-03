@@ -263,7 +263,7 @@ function Repo({ toggleDark, isDark }: IRepoProps) {
     return (
         <Container>
             <Helmet>
-                <title>Repo Tracker</title>
+                <title>Repo Tracker | { loading ? "Repository" : repoData?.name }</title>
             </Helmet>
             <Header>
                 <BackBtn>
