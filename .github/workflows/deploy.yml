@@ -24,7 +24,7 @@ jobs:
       - name: Build project
         env:
           REACT_APP_OCTOKIT_TOKEN: ${{ secrets.REACT_APP_OCTOKIT_TOKEN }}
-          REACT_APP_USERNAME: ${{ vars.REACT_APP_USERNAME }}
+          REACT_APP_USERNAME: $REACT_APP_USERNAME
         run: npm run build
 
       - name: Deploy to GitHub Pages
@@ -32,7 +32,3 @@ jobs:
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
-
-      - name: Print environment variables
-        run: |
-          echo "REACT_APP_USERNAME: ${{ vars.REACT_APP_USERNAME }}"
