@@ -11,7 +11,7 @@ interface IRouterProps {
 
 function Router({ toggleDark, isDark }: IRouterProps) {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
                 <Route path="/" element={<Repos toggleDark={toggleDark} isDark={isDark} />} />
                 <Route path="/:repo/*" element={<Repo toggleDark={toggleDark} isDark={isDark} />}>
