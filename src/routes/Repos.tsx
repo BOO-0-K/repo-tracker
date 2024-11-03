@@ -102,8 +102,6 @@ function Repos({ toggleDark, isDark }: IReposProps) {
         },
     });
 
-    console.log("LOG: " + process.env.REACT_APP_OCTOKIT_TOKEN);
-
     return (
         <Container>
             <Helmet>
