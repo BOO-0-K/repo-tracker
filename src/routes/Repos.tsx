@@ -102,6 +102,8 @@ function Repos({ toggleDark, isDark }: IReposProps) {
         },
     });
 
+    console.log("Username: " + process.env.REACT_APP_USERNAME);
+
     return (
         <Container>
             <Helmet>
