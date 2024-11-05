@@ -1,8 +1,6 @@
 import { Octokit } from "octokit";
 
-const octokit = new Octokit({
-    auth: process.env.REACT_APP_OCTOKIT_TOKEN
-});
+const octokit = new Octokit();
 
 export function fetchRepos() {
     return octokit.request(`GET /users/${process.env.REACT_APP_USERNAME}/repos`);
