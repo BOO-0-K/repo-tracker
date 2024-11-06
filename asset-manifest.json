@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/repo-tracker/static/js/main.80de6289.js",
+    "main.js": "/repo-tracker/static/js/main.2f812073.js",
     "index.html": "/repo-tracker/index.html",
-    "main.80de6289.js.map": "/repo-tracker/static/js/main.80de6289.js.map"
+    "main.2f812073.js.map": "/repo-tracker/static/js/main.2f812073.js.map"
   },
   "entrypoints": [
-    "static/js/main.80de6289.js"
+    "static/js/main.2f812073.js"
   ]
 }
