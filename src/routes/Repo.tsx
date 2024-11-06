@@ -199,20 +199,14 @@ function Repo({ toggleDark, isDark }: IRepoProps) {
     const commitTabMatch = useMatch("/:repo/commits");
     const messageTabMatch = useMatch("/:repo/messages");
 
-    const { isLoading: repoLoading , data: repoData } = useQuery({
+    const { isLoading: repoLoading , data: repoData } = useQuery<IRepo>({
         queryKey: ["repo", repo],
-        queryFn: () => fetchRepo(`${repo}`),
-        select: (response) => {
-            return response.data as IRepo;
-        }
+        queryFn: () => fetchRepo(`${repo}`)
     });
 
-    const { isLoading: commitLoading , data: commitData } = useQuery({
+    const { isLoading: commitLoading , data: commitData } = useQuery<ICommit[]>({
         queryKey: ["commit", repo],
-        queryFn: () => fetchCommit(`${repo}`),
-        select: (response) => {
-            return response.data as ICommit[];
-        }
+        queryFn: () => fetchCommit(`${repo}`)
     });
 
     function getTodayCommitCount(commits: ICommit[]): number {

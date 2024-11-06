@@ -94,12 +94,9 @@ interface IReposProps {
 }
 
 function Repos({ toggleDark, isDark }: IReposProps) {
-    const {isLoading, data: repos} = useQuery({
+    const {isLoading, data: repos} = useQuery<IRepo[]>({
         queryKey: ['allRepos'],
-        queryFn: fetchRepos,
-        select: (response) => {
-            return response.data as IRepo[];
-        },
+        queryFn: fetchRepos
     });
 
     return (
