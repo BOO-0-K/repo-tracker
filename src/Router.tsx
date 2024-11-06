@@ -11,10 +11,10 @@ interface IRouterProps {
 
 function Router({ toggleDark, isDark }: IRouterProps) {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={`${process.env.PUBLIC_URL}`}>
             <Routes>
-                <Route path={`${process.env.PUBLIC_URL}`} element={<Repos toggleDark={toggleDark} isDark={isDark} />} />
-                <Route path={`${process.env.PUBLIC_URL}/:repo/*`} element={<Repo toggleDark={toggleDark} isDark={isDark} />}>
+                <Route path="/" element={<Repos toggleDark={toggleDark} isDark={isDark} />} />
+                <Route path="/:repo/*" element={<Repo toggleDark={toggleDark} isDark={isDark} />}>
                     <Route path="commits" element={<Commits isDark={isDark} />} />
                     <Route path="messages" element={<Messages />} />
                 </Route>
