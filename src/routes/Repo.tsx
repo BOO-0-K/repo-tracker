@@ -274,7 +274,7 @@ function Repo({ toggleDark, isDark }: IRepoProps) {
             </Header>
             {
                 loading ? (
-                    <Loader>Loadign...</Loader>
+                    <Loader>Loading...</Loader>
                 ) : (
                     <>  
                         <Overview>
