@@ -211,11 +211,13 @@ function Repo({ toggleDark, isDark }: IRepoProps) {
 
     function getTodayCommitCount(commits: ICommit[]): number {
         const today = new Date();
+        today.setDate(today.getDate() - 1);
         const todayString = today.toISOString().split('T')[0];
+        const todayUTC = `${todayString}T15:00:00Z`;
 
         const todayCommits = commits.filter(commit => {
-            const commitDate = new Date(commit.commit.committer.date).toISOString().split('T')[0];
-            return commitDate === todayString;
+            const commitDate = new Date(commit.commit.committer.date).toISOString();
+            return commitDate >= todayUTC;
         });
 
         return todayCommits.length;
