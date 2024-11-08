@@ -69,9 +69,15 @@ function Messages() {
 
     function getDailyCommitMessages(commits: ICommit[]): Record<string, IMessage[]> {
         const commitMessages: Record<string, IMessage[]> = {};
-
+        
         commits.forEach(commit => {
-            const date = new Date(commit.commit.committer.date).toISOString().split('T')[0];
+            const dateUTC = new Date(commit.commit.committer.date);
+
+            const offset = dateUTC.getTimezoneOffset() / 60;
+            const localDateInKST = new Date(dateUTC.getTime() + (offset * 60 * 1000) + (9 * 60 * 60 * 1000));
+
+            const date = localDateInKST.toISOString().split("T")[0];
+
             if (!commitMessages[date]) {
                 commitMessages[date] = [];
             }

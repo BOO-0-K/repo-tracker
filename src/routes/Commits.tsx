@@ -48,7 +48,12 @@ function Commits({ isDark }: ICommitsProps) {
         const commitCounts: Record<string, number> = {};
 
         commits.forEach(commit => {
-            const date = new Date(commit.commit.committer.date).toISOString().split('T')[0];
+            const dateUTC = new Date(commit.commit.committer.date);
+
+            const offset = dateUTC.getTimezoneOffset() / 60;
+            const localDateInKST = new Date(dateUTC.getTime() + (offset * 60 * 1000) + (9 * 60 * 60 * 1000));
+
+            const date = localDateInKST.toISOString().split("T")[0];
             commitCounts[date] = (commitCounts[date] || 0) + 1;
         });
 
