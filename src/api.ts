@@ -17,3 +17,9 @@ export function fetchCommit(repo: string) {
         response.json()
     );
 }
+
+export function fetchCommits() {
+    return fetch(`${BASE_URL}/commits`).then((response) =>
+        response.json()
+    );
+}

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchRepos } from "../api";
+import { fetchCommits, fetchRepos } from "../api";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,6 +39,11 @@ const ToggleDarkBtn = styled.button`
     color: ${(props) => props.theme.textColor};
     border: none;
     cursor: pointer;
+`;
+
+const Description = styled.p`
+    margin: 0px 0px 20px 0px;
+    text-align: center;
 `;
 
 const ReposList = styled.ul``;
@@ -88,16 +93,27 @@ interface IRepo {
     updated_at: string;
 }
 
+interface ICommits {
+    total_count: string;
+}
+
 interface IReposProps {
     toggleDark: () => void;
     isDark: boolean;
 }
 
 function Repos({ toggleDark, isDark }: IReposProps) {
-    const {isLoading, data: repos} = useQuery<IRepo[]>({
+    const {isLoading: reposLoading, data: repos} = useQuery<IRepo[]>({
         queryKey: ['allRepos'],
         queryFn: fetchRepos
     });
+
+    const {isLoading: commitsLoading, data: commits} = useQuery<ICommits>({
+        queryKey: ['todayCommits'],
+        queryFn: fetchCommits
+    });
+
+    const isLoading = reposLoading || commitsLoading;
 
     return (
         <Container>
@@ -114,17 +130,20 @@ function Repos({ toggleDark, isDark }: IReposProps) {
                 isLoading ? (
                     <Loader>Loading...</Loader>
                 ) : (
-                    <ReposList>
-                        {
-                            repos?.map((repo) => (
-                                <Repo key={repo.id}>
-                                    <Link to={`/${repo.name}`}>
-                                        {repo.name}
-                                    </Link>
-                                </Repo>
-                            ))
-                        }
-                    </ReposList>
+                    <>
+                        <Description>Today's Total Commits: {commits?.total_count}</Description>
+                        <ReposList>
+                            {
+                                repos?.map((repo) => (
+                                    <Repo key={repo.id}>
+                                        <Link to={`/${repo.name}`}>
+                                            {repo.name}
+                                        </Link>
+                                    </Repo>
+                                ))
+                            }
+                        </ReposList>
+                    </>
                 )
             }
             <Footer>
